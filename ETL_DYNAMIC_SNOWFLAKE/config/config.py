@@ -8,9 +8,9 @@ SQL_SERVER_CONFIG = {
 }
 
 SNOWFLAKE_CONFIG = {
-    "user": "BLSCHARAN",
-    "password": "Scheryy@12345678",
-    "account": "myhrjeq-zq60870",
+    "user": "****",
+    "password": "*****",
+    "account": "*******",
     "warehouse": "ETL_WH_DYNAMIC",
     "database": "ETL_DYNAMIC",
     "schema": "TARGET",
