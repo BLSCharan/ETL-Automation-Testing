@@ -1,0 +1,17 @@
+{
+  "sql_server": {
+    "driver": "ODBC Driver 17 for SQL Server",
+    "server": "LENOVO\\SQLEXPRESS",
+    "database": "ETL_SUPERSTORE"
+  },
+  "snowflake": {
+    "user": "BLSCHARAN",
+    "password": "Scheryy@12345678",
+    "account": "myhrjeq-zq60870",
+    "warehouse": "ETL_WH",
+    "database": "ETL_SUPERSTORE_DB",
+    "schema": "PUBLIC",
+    "role": "ACCOUNTADMIN"
+  }
+}
+

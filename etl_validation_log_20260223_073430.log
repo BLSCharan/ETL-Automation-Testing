@@ -1,0 +1,49 @@
+2026-02-23 07:34:30,819 - INFO - ETL Validation Process Started
+2026-02-23 07:34:31,165 - INFO - Connected to SQL Server Successfully
+2026-02-23 07:34:31,167 - INFO - Snowflake Connector for Python Version: 4.3.0, Python Version: 3.12.7, Platform: Windows-11-10.0.26200-SP0
+2026-02-23 07:34:31,169 - INFO - Connecting to GLOBAL Snowflake domain
+2026-02-23 07:34:35,320 - INFO - Connected to Snowflake Successfully
+2026-02-23 07:34:36,045 - INFO - Data loaded into Pandas DataFrames successfully
+2026-02-23 07:34:36,045 - INFO - Source Count: 8
+2026-02-23 07:34:36,045 - INFO - Target Count: 3
+2026-02-23 07:34:36,045 - ERROR - Row Count Validation Failed
+2026-02-23 07:34:36,045 - INFO - Column Validation Passed
+2026-02-23 07:34:36,050 - INFO - Source Null Counts:
+id      0
+name    2
+city    2
+age     2
+dtype: int64
+2026-02-23 07:34:36,050 - INFO - Target Null Counts:
+id      0
+name    0
+city    0
+age     0
+dtype: int64
+2026-02-23 07:34:36,062 - INFO - Source Duplicate Rows: 0
+2026-02-23 07:34:36,062 - INFO - Target Duplicate Rows: 1
+2026-02-23 07:34:36,064 - INFO - Source Data Types:
+id        int64
+name        str
+city        str
+age     float64
+dtype: object
+2026-02-23 07:34:36,065 - INFO - Target Data Types:
+id      int64
+name      str
+city      str
+age     int64
+dtype: object
+2026-02-23 07:34:36,100 - ERROR - Records missing in Target:
+   id name_source city_source  ...  city_target age_target     _merge
+2   2       Rahul   Hyderabad  ...          NaN        NaN  left_only
+4   4       Meena       Delhi  ...          NaN        NaN  left_only
+5   5       Meena       Delhi  ...          NaN        NaN  left_only
+6   6         NaN         NaN  ...          NaN        NaN  left_only
+7   7         NaN         NaN  ...          NaN        NaN  left_only
+8   8       param      mumbai  ...          NaN        NaN  left_only
+
+[6 rows x 8 columns]
+2026-02-23 07:34:36,104 - INFO - No Data Mismatches Found
+2026-02-23 07:34:36,248 - INFO - Connections Closed Successfully
+2026-02-23 07:34:36,248 - INFO - ETL Validation Process Completed
