@@ -17,9 +17,9 @@ except Exception as e:
 
 try:
     sf_connection = snowflake.connector.connect(
-        user='BLSCHARAN',
-        password='Scheryy@12345678',
-        account='myhrjeq-zq60870',
+        user='*****',
+        password='******',
+        account='****',
         warehouse='ETL_WH',
         database='ETL_DB',
         schema='PUBLIC',
