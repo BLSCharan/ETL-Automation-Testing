@@ -43,9 +43,9 @@ def get_sql_server_connection():
 
 def get_snowflake_connection():
     conn = snowflake.connector.connect(
-        user="BLSCHARAN",
-        password="Scheryy@12345678",
-        account="myhrjeq-zq60870",
+        user="******",
+        password="*******",
+        account="******",
         warehouse="ETL_WH",
         database="ETL_SUPERSTORE_DB",
         schema="PUBLIC",
