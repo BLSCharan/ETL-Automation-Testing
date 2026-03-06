@@ -1,0 +1,50 @@
+2026-03-03 08:20:32,497 | INFO | ========== ETL TEST EXECUTION STARTED ==========
+2026-03-03 08:20:32,498 | INFO | Execution Started | Load Type: CDC
+2026-03-03 08:20:33,181 | INFO | SQL Server Connection Established
+2026-03-03 08:20:33,182 | INFO | Snowflake Connector for Python Version: 4.3.0, Python Version: 3.11.4, Platform: Windows-10-10.0.26200-SP0
+2026-03-03 08:20:33,183 | INFO | Connecting to GLOBAL Snowflake domain
+2026-03-03 08:20:37,798 | INFO | Snowflake Connection Established
+2026-03-03 08:20:38,598 | INFO | Source Rows Loaded: 9994
+2026-03-03 08:20:40,633 | INFO | Target Rows Loaded: 3765
+2026-03-03 08:20:40,633 | INFO | Row Count Validation Started
+2026-03-03 08:20:40,633 | INFO | Source Count: 9994
+2026-03-03 08:20:40,633 | INFO | Target Count: 3765
+2026-03-03 08:20:40,633 | INFO | Column Validation Started
+2026-03-03 08:20:40,635 | INFO | Missing Columns: set()
+2026-03-03 08:20:40,635 | INFO | Extra Columns: {'order_day', 'year_month', 'product_name_length', 'order_month', 'total_region_profit', 'order_year', 'avg_region_profit', 'max_region_sales', 'shipping_days', 'min_region_sales', 'product_prefix', 'total_region_sales', 'order_weekday', 'total_region_orders'}
+2026-03-03 08:20:40,635 | INFO | Null Validation Started
+2026-03-03 08:20:40,668 | INFO | Source Null Count: 0
+2026-03-03 08:20:40,668 | INFO | Target Null Count: 0
+2026-03-03 08:20:40,668 | INFO | Duplicate Validation Started
+2026-03-03 08:20:40,715 | INFO | Source Duplicate Rows: 0
+2026-03-03 08:20:40,715 | INFO | Target Duplicate Rows: 0
+2026-03-03 08:20:40,715 | INFO | DataType Validation Started
+2026-03-03 08:20:40,716 | INFO | DataType Mismatch Columns: []
+2026-03-03 08:20:40,716 | INFO | Filter Validation Started
+2026-03-03 08:20:40,721 | INFO | Rows with SALES <= 100: 0
+2026-03-03 08:20:40,721 | INFO | String Transformation Validation Started
+2026-03-03 08:20:41,171 | INFO | String Transformation Mismatch Count: 0
+2026-03-03 08:20:41,181 | INFO | Regex Cleaning Validation Started
+2026-03-03 08:20:41,451 | INFO | Regex Cleaning Mismatch Count: 0
+2026-03-03 08:20:41,456 | INFO | Region Aggregation Validation Started
+2026-03-03 08:20:41,757 | INFO | Region Aggregation Mismatch Count: 0
+2026-03-03 08:20:41,761 | INFO | CDC Insert Validation Started
+2026-03-03 08:20:41,808 | INFO | Unloaded Insert Records (After Filter): 0
+2026-03-03 08:20:41,812 | INFO | CDC Update Validation Started
+2026-03-03 08:20:41,838 | INFO | Updated Column Mismatch Count: 0
+2026-03-03 08:20:41,840 | INFO | CDC Delete Validation Started
+2026-03-03 08:20:41,892 | INFO | Orphan Records in Target: 0
+2026-03-03 08:20:41,896 | ERROR | Row Count : FAILED
+2026-03-03 08:20:41,896 | INFO | Column Validation : PASSED
+2026-03-03 08:20:41,904 | INFO | Null Validation : PASSED
+2026-03-03 08:20:41,906 | INFO | Duplicate Validation : PASSED
+2026-03-03 08:20:41,909 | INFO | DataType Validation : PASSED
+2026-03-03 08:20:41,912 | INFO | Filter Validation : PASSED
+2026-03-03 08:20:41,934 | INFO | String Transformation : PASSED
+2026-03-03 08:20:41,935 | INFO | Regex Cleaning : PASSED
+2026-03-03 08:20:41,941 | INFO | Region Aggregation : PASSED
+2026-03-03 08:20:41,941 | INFO | CDC Insert : PASSED
+2026-03-03 08:20:41,942 | INFO | CDC Update : PASSED
+2026-03-03 08:20:41,942 | INFO | CDC Delete : PASSED
+2026-03-03 08:20:41,942 | INFO | OVERALL ETL TEST FAILED
+2026-03-03 08:20:42,105 | INFO | ========== ETL TEST EXECUTION COMPLETED ==========

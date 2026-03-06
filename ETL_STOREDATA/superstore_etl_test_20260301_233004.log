@@ -1,0 +1,31 @@
+2026-03-01 23:30:04,804 | INFO | ========== ETL TEST EXECUTION STARTED ==========
+2026-03-01 23:30:04,804 | INFO | Execution Started | Load Type: CDC
+2026-03-01 23:30:04,979 | INFO | SQL Server Connection Established
+2026-03-01 23:30:04,979 | INFO | Snowflake Connector for Python Version: 4.3.0, Python Version: 3.11.4, Platform: Windows-10-10.0.26200-SP0
+2026-03-01 23:30:04,983 | INFO | Connecting to GLOBAL Snowflake domain
+2026-03-01 23:30:08,101 | INFO | Snowflake Connection Established
+2026-03-01 23:30:08,413 | INFO | Source Rows Loaded: 9994
+2026-03-01 23:30:09,140 | INFO | Target Rows Loaded: 3765
+2026-03-01 23:30:09,140 | INFO | Row Count Validation Started
+2026-03-01 23:30:09,144 | INFO | Source Count: 9994
+2026-03-01 23:30:09,144 | INFO | Target Count: 3765
+2026-03-01 23:30:09,144 | INFO | Column Validation Started
+2026-03-01 23:30:09,144 | INFO | Missing Columns: set()
+2026-03-01 23:30:09,144 | INFO | Extra Columns: {'order_weekday', 'product_name_length', 'year_month', 'order_day', 'total_region_orders', 'min_region_sales', 'product_prefix', 'max_region_sales', 'shipping_days', 'total_region_sales', 'order_month', 'total_region_profit', 'order_year', 'avg_region_profit'}
+2026-03-01 23:30:09,144 | INFO | Null Validation Started
+2026-03-01 23:30:09,156 | INFO | Source Null Count: 0
+2026-03-01 23:30:09,156 | INFO | Target Null Count: 0
+2026-03-01 23:30:09,156 | INFO | Duplicate Validation Started
+2026-03-01 23:30:09,181 | INFO | Source Duplicate Rows: 0
+2026-03-01 23:30:09,181 | INFO | Target Duplicate Rows: 0
+2026-03-01 23:30:09,181 | INFO | DataType Validation Started
+2026-03-01 23:30:09,181 | INFO | DataType Mismatch Columns: []
+2026-03-01 23:30:09,181 | INFO | Filter Validation Started
+2026-03-01 23:30:09,183 | INFO | Rows with SALES <= 100: 0
+2026-03-01 23:30:09,183 | INFO | String Transformation Validation Started
+2026-03-01 23:30:09,373 | INFO | String Transformation Mismatch Count: 0
+2026-03-01 23:30:09,379 | INFO | Regex Cleaning Validation Started
+2026-03-01 23:30:09,523 | INFO | Regex Cleaning Mismatch Count: 0
+2026-03-01 23:30:09,523 | INFO | Region Aggregation Validation Started
+2026-03-01 23:30:09,689 | INFO | Region Aggregation Mismatch Count: 0
+2026-03-01 23:30:09,693 | INFO | CDC Insert Validation Started

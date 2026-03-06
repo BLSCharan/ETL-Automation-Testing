@@ -43,9 +43,9 @@ def get_sql_server_connection():
 
 def get_snowflake_connection():
     conn = snowflake.connector.connect(
-        user="BLSCHARAN",
-        password="Scheryy@12345678",
-        account="myhrjeq-zq60870",
+        user="CHARAN",
+        password="06082004Snowflake",
+        account="nxeikip-nt24114",
         warehouse="ETL_WH",
         database="ETL_SUPERSTORE_DB",
         schema="PUBLIC",
@@ -278,6 +278,171 @@ def validate_region_aggregations(df_target):
 
     return mismatch_count == 0
 
+#WEEK 5 – ADVANCED ETL AUTOMATION & SNOWFLAKE FOCUS
+
+# 1) INCREMENTAL LOAD VALIDATION (ADVANCED)
+
+def validate_incremental_load(df_source, df_target):
+
+    logging.info("Incremental Load Validation Started")
+
+    max_loaded_id = df_target[PRIMARY_KEY_TARGET].max()
+    logging.info(f"Max ID in Target: {max_loaded_id}")
+
+    incremental_source = df_source[df_source[PRIMARY_KEY_SOURCE] > max_loaded_id]
+    target_incremental = df_target[df_target[PRIMARY_KEY_TARGET] > max_loaded_id]
+
+    logging.info(f"Incremental Source Rows: {len(incremental_source)}")
+    logging.info(f"Incremental Target Rows: {len(target_incremental)}")
+
+    if len(incremental_source) != len(target_incremental):
+        logging.error("Incremental Row Count Mismatch")
+        return False
+
+    merged = incremental_source.merge(
+        target_incremental,
+        left_on=PRIMARY_KEY_SOURCE,
+        right_on=PRIMARY_KEY_TARGET,
+        how="outer",
+        indicator=True
+    )
+
+    mismatch = merged[merged["_merge"] != "both"]
+
+    logging.info(f"Incremental Mismatch Rows: {len(mismatch)}")
+
+    return len(mismatch) == 0
+
+
+# 2️) CDC AUTOMATION TESTING
+
+def validate_cdc_inserts(df_source, df_target):
+
+    logging.info("CDC Insert Validation Started")
+
+    # Convert Sales to numeric safely
+    df_source["Sales"] = pd.to_numeric(df_source["Sales"], errors="coerce")
+
+    # Apply same ETL filter
+    filtered_source = df_source[df_source["Sales"] > 100]
+
+    merged = filtered_source.merge(
+        df_target,
+        left_on=PRIMARY_KEY_SOURCE,
+        right_on=PRIMARY_KEY_TARGET,
+        how="left",
+        indicator=True
+    )
+
+    inserts = merged[merged["_merge"] == "left_only"]
+
+    logging.info(f"Unloaded Insert Records (After Filter): {len(inserts)}")
+
+    return len(inserts) == 0
+
+def validate_cdc_updates(df_source, df_target):
+
+    logging.info("CDC Update Validation Started")
+
+    common = df_source.merge(
+        df_target,
+        left_on=PRIMARY_KEY_SOURCE,
+        right_on=PRIMARY_KEY_TARGET,
+        how="inner",
+        suffixes=("_SRC", "_TGT")
+    )
+
+    mismatch_count = 0
+
+    for col in df_source.columns:
+        if col in df_target.columns:
+            if not common[f"{col}_SRC"].equals(common[f"{col}_TGT"]):
+                mismatch_count += 1
+
+    logging.info(f"Updated Column Mismatch Count: {mismatch_count}")
+
+    return mismatch_count == 0
+
+
+def validate_cdc_deletes(df_source, df_target):
+
+    logging.info("CDC Delete Validation Started")
+
+    merged = df_target.merge(
+        df_source,
+        left_on=PRIMARY_KEY_TARGET,
+        right_on=PRIMARY_KEY_SOURCE,
+        how="left",
+        indicator=True
+    )
+
+    deleted_records = merged[merged["_merge"] == "left_only"]
+
+    logging.info(f"Orphan Records in Target: {len(deleted_records)}")
+
+    return len(deleted_records) == 0
+
+
+# 3) DATA RECONCILIATION STRATEGIES
+
+def validate_aggregate_reconciliation(df_source, df_target):
+
+    logging.info("Aggregate Reconciliation Started")
+
+    # Apply same ETL filter (Sales > 100)
+    filtered_source = df_source[df_source["Sales"] > 100]
+
+    source_sum = filtered_source["Sales"].sum()
+    target_sum = df_target["SALES"].sum()
+
+    logging.info(f"Filtered Source Sales Sum: {source_sum}")
+    logging.info(f"Target Sales Sum: {target_sum}")
+
+    return round(source_sum, 2) == round(target_sum, 2)
+
+def validate_hash_reconciliation(df_source, df_target):
+
+    logging.info("Simple Reconciliation Started")
+
+    # Apply ETL filter
+    filtered_source = df_source[df_source["Sales"] > 100]
+
+    source_ids = set(filtered_source[PRIMARY_KEY_SOURCE])
+    target_ids = set(df_target[PRIMARY_KEY_TARGET])
+
+    logging.info(f"Filtered Source Count: {len(source_ids)}")
+    logging.info(f"Target Count: {len(target_ids)}")
+
+    missing_in_target = source_ids - target_ids
+    extra_in_target = target_ids - source_ids
+
+    logging.info(f"Missing In Target: {len(missing_in_target)}")
+    logging.info(f"Extra In Target: {len(extra_in_target)}")
+
+    return len(missing_in_target) == 0 and len(extra_in_target) == 0
+
+
+def validate_sampling_reconciliation(df_source, df_target, sample_size=100):
+
+    logging.info("Sampling Reconciliation Started")
+
+    filtered_source = df_source[df_source["Sales"] > 100]
+
+    if len(filtered_source) == 0:
+        return False
+
+    sample_source = filtered_source.sample(min(sample_size, len(filtered_source)))
+
+    merged = sample_source.merge(
+        df_target,
+        left_on=PRIMARY_KEY_SOURCE,
+        right_on=PRIMARY_KEY_TARGET,
+        how="inner"
+    )
+
+    logging.info(f"Sample Rows Compared: {len(merged)}")
+
+    return len(merged) == len(sample_source)
 
 #MASTER EXECUTION
 
@@ -300,6 +465,7 @@ def execute_etl_tests(load_type="FULL"):
 
     test_results = {}
 
+    # WEEK 4 TESTS
     test_results["Row Count"] = validate_counts(df_source, df_target)
     test_results["Column Validation"] = validate_columns(df_source, df_target)
     test_results["Null Validation"] = validate_nulls(df_source, df_target)
@@ -310,15 +476,34 @@ def execute_etl_tests(load_type="FULL"):
     test_results["Regex Cleaning"] = validate_regex_cleaning(df_source, df_target)
     test_results["Region Aggregation"] = validate_region_aggregations(df_target)
 
+    #WEEK 5 EXTENSIONS
+
+    if load_type.upper() == "INCREMENTAL":
+        test_results["Incremental Validation"] = validate_incremental_load(df_source, df_target)
+
+    elif load_type.upper() == "CDC":
+        test_results["CDC Insert"] = validate_cdc_inserts(df_source, df_target)
+        test_results["CDC Update"] = validate_cdc_updates(df_source, df_target)
+        test_results["CDC Delete"] = validate_cdc_deletes(df_source, df_target)
+
+    elif load_type.upper() == "FULL":
+        test_results["Aggregate Reconciliation"] = validate_aggregate_reconciliation(df_source, df_target)
+        test_results["Hash Reconciliation"] = validate_hash_reconciliation(df_source, df_target)
+        test_results["Sampling Reconciliation"] = validate_sampling_reconciliation(df_source, df_target)
+
+    # RESULT LOGGING
+
     for test_name, result in test_results.items():
-        message = f"{test_name} : {'PASSED' if result else 'FAILED'}"
+        result_bool = bool(result)   #  force boolean safety
+        message = f"{test_name} : {'PASSED' if result_bool else 'FAILED'}"
         print(message)
-        if result:
+
+        if result_bool:
             logging.info(message)
         else:
             logging.error(message)
 
-    overall_status = all(test_results.values())
+    overall_status = all(bool(r) for r in test_results.values())
 
     final_message = "OVERALL ETL TEST PASSED" if overall_status else "OVERALL ETL TEST FAILED"
     print(final_message)
@@ -329,8 +514,9 @@ def execute_etl_tests(load_type="FULL"):
 
     logging.info("========== ETL TEST EXECUTION COMPLETED ==========")
 
-
 #ENTRY POINT
 
 if __name__ == "__main__":
     execute_etl_tests(load_type="FULL")
+    execute_etl_tests(load_type="INCREMENTAL")
+    execute_etl_tests(load_type="CDC")
